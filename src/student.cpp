@@ -43,7 +43,7 @@ using namespace std;
 
 int riwayatMaju(DNode* head, int* keluaran) {
     int n = 0;
-    for (DNode* p = head; p != nullptr; p = p->next) {
+    for (DNode* p = head; p != NULL; p = p->next) {
         keluaran[n] = p->data;
         ++n;
     }
@@ -51,7 +51,7 @@ int riwayatMaju(DNode* head, int* keluaran) {
 }
 
 int putaranTab(CNode* head, int* keluaran) {
-    if (head == nullptr) return 0;
+    if (head == NULL) return 0;
 
     int n = 0;
     CNode* p = head;
@@ -64,16 +64,16 @@ int putaranTab(CNode* head, int* keluaran) {
 }
 
 void hapusSeluruhRiwayat(DNode*& head, DNode*& tail) {
-    while (head != nullptr) {
+    while (head != NULL) {
         DNode* berikut = head->next;
         delete head;
         head = berikut;
     }
-    tail = nullptr;
+    tail = NULL;
 }
 
 void tutupSemuaTab(CNode*& head) {
-    if (head == nullptr) return;
+    if (head == NULL) return;
 
     CNode* p = head->next;
     while (p != head) {
@@ -82,29 +82,94 @@ void tutupSemuaTab(CNode*& head) {
         p = berikut;
     }
     delete head;
-    head = nullptr;
+    head = NULL;
 }
 
 // =============================================================================
 
 // SOAL 1
 bool bukaHalaman(DNode*& head, DNode*& tail, int nomor) {
+    DNode* baru = new DNode{nomor, NULL, NULL};
+    if(baru == NULL) 
     return false;
+
+    if(head == NULL){
+        head = baru;
+        tail = baru;
+    }
+    else {
+        tail ->next = baru;
+        baru ->prev = tail;
+        tail = baru;
+    }
+    return true;
 }
 
 // SOAL 2
 int riwayatMundur(DNode* tail, int* keluaran) {
-    return 0;
+    int n = 0;
+    for(DNode* p = tail; p!= NULL; p = p->prev){
+        keluaran[n]=p->data;
+        ++n;
+    }
+    return n;
 }
 
 // SOAL 3
 bool hapusHalaman(DNode*& head, DNode*& tail, int nomor) {
+    if(head == NULL )
     return false;
+
+    DNode* p=head;
+    while (p != NULL && p->data != nomor){
+        p = p->next;
+    }
+    if(p == NULL)
+    return false;
+    if(p == head){
+        head = head->next;
+        if(head != NULL){
+            head ->prev = NULL;
+        }
+        else{
+            tail = NULL;
+        }
+    }
+
+    else if(p == tail){
+        tail = tail->prev;
+        if(tail != NULL){
+            tail ->next = NULL;
+        }
+    }
+    else{
+        p->prev->next = p->next;
+        p->next->prev = p->prev;
+    }
+    delete p;
+    return true;
 }
 
 // SOAL 4
 bool bukaTab(CNode*& head, int nomor) {
-    return false;
+    CNode* baru = new CNode{nomor, NULL};
+    if(baru == NULL)return false;
+    
+    if(head == NULL){
+        head = baru;
+        baru ->next = head;
+
+    }
+    else{
+        CNode* p = head;
+        while (p->next != head) {
+          p = p->next;  
+        }
+        p->next=baru;
+        baru->next=head;
+        
+    }
+    return true;
 }
 
 // =============================================================================
@@ -180,8 +245,8 @@ int main() {
     cout << " (bagian ini tidak ikut dinilai)\n";
     cout << "==================================================\n";
 
-    DNode* head = nullptr;
-    DNode* tail = nullptr;
+    DNode* head = NULL;
+    DNode* tail = NULL;
 
     langkah("[0] Jelajah baru dibuka, riwayat masih kosong");
     keadaanRiwayat(head, tail);
@@ -215,7 +280,7 @@ int main() {
     keadaanRiwayat(head, tail);
     cout << "\n    Yang benar: false, dan riwayat tidak berubah\n";
 
-    CNode* tab = nullptr;
+    CNode* tab = NULL;
 
     langkah("[4] SOAL 4 — bukaTab: membuka tab 201, lalu 202, lalu 203");
     bukaTab(tab, 201);
